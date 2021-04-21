@@ -372,14 +372,12 @@ vector<Pattern*> getPatterns(vector<ReadWriteNode> nodes, ReadWriteNode curNode,
             if (node.type == READ && node.selector == curNode.selector)
             {
                 break;
-            }  //最后一个读
-
+            }  
             if (node.type == WRITE && node.selector != curNode.selector)
             {
                 tmpPattern.push_back(new Pattern({curNode, node}));
                 break;
-            }  // 第一个写
-
+            } 
             if (node.type == WRITE)
             {
                 break;
@@ -395,14 +393,12 @@ vector<Pattern*> getPatterns(vector<ReadWriteNode> nodes, ReadWriteNode curNode,
             {
                 tmpPattern.push_back(new Pattern({curNode, node}));
                 continue;
-            }  //所有的读
-
+            } 
             if (node.type == WRITE && node.selector != curNode.selector)
             {
                 tmpPattern.push_back(new Pattern({curNode, node}));
                 break;
-            }  // 第一个写
-
+            }  
             if (node.type == WRITE)
             {
                 break;
@@ -567,7 +563,7 @@ string getString(Pattern* p)
 }
 
 bool isRead(vector<ReadWriteNode> trace, string var)
-{  //看第一个对var的操作是READ
+{ 
     if (trace.size() == 0)
     {
         return false;
@@ -583,7 +579,7 @@ bool isRead(vector<ReadWriteNode> trace, string var)
 }
 
 bool isWrite(vector<ReadWriteNode> trace, string var)
-{  //看是否存在对var的写
+{ 
     if (trace.size() == 0)
     {
         return false;
@@ -598,7 +594,6 @@ bool isWrite(vector<ReadWriteNode> trace, string var)
     return false;
 }
 
-//以这个func的Type操作为第一个Node，去匹配所有可能的Pattern, 最终返回函数调用的前缀
 vector<vector<size_t>> getNewPatternPrefixes(EventType type, uint32_t func,
     unordered_set<uint32_t> readCandidates, unordered_set<uint32_t> writeCandidates,
     unordered_map<uint32_t, size_t> funcIdxs)

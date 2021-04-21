@@ -235,11 +235,7 @@ FuzzItem Fuzzer::saveIfInterest(TargetExecutive &te,
     fuzzStat.totalExecDur += item.res.execDur;
     fuzzStat.totalExecs += data.second.size();
     for (auto tracebit : item.res.newTracebits)
-    {
-        //对于新Cover的Branch
-        // Remove leader
-        // leaders : <"pcJumpBefore:pcJumpAfter", Leader { comparationValue: |cmp1-cmp2|,
-        // FuzzItem :{ } }>
+    { 
         auto lIt = find_if(leaders.begin(), leaders.end(),
                            [=](const pair<string, Leader> &p) { return p.first == tracebit; });
         if (lIt != leaders.end())
@@ -249,7 +245,7 @@ FuzzItem Fuzzer::saveIfInterest(TargetExecutive &te,
             queues.push_back(tracebit);
         // Insert leader
         item.depth = depth + 1;
-        auto leader = Leader(item, 0); // 0 表示已经Cover
+        auto leader = Leader(item, 0);  
         leaders.insert(make_pair(tracebit, leader));
         if (depth + 1 > fuzzStat.maxdepth)
             fuzzStat.maxdepth = depth + 1;
@@ -258,7 +254,7 @@ FuzzItem Fuzzer::saveIfInterest(TargetExecutive &te,
         Logger::debug(Logger::testFormat(item.data));
     }
     for (auto predicateIt : item.res.predicates)
-    { //对于那些just-miss的branch <Branch, comparationVal>
+    {  
         auto lIt = find_if(leaders.begin(), leaders.end(),
                            [=](const pair<string, Leader> &p) { return p.first == predicateIt.first; });
         if (lIt != leaders.end()                                //  Leader Founded
@@ -354,12 +350,11 @@ FuzzItem Fuzzer::saveIfInterest(TargetExecutive &te,
 
     if (!passive)
     {
-        unordered_map<size_t, vector<string>> newReadFuncVars; // 第i个func新读写
+        unordered_map<size_t, vector<string>> newReadFuncVars; 
         unordered_map<size_t, vector<string>> newWriteFuncVars;
         auto funcsExec = item.res.funcsExec;
 
-        for (int i = 1; i < funcsExec.size(); i++) //第一个调用是constructor, constructor 不参与
-                                                   // orderMutate
+        for (int i = 1; i < funcsExec.size(); i++)
         {
             auto func = get<1>(funcsExec[i]);
             auto funcData = get<2>(funcsExec[i]);
@@ -541,13 +536,13 @@ void Fuzzer::start()
     {
         auto isAttacker = contractInfo.contractName.find(fuzzParam.attackerName) != string::npos;
         if (!contractInfo.isMain && !isAttacker)
-            continue; //编译attacker 和 直接调用的
+            continue;
         ContractABI ca(contractInfo.abiJson);
         auto bin = fromHex(contractInfo.bin);
         auto binRuntime = fromHex(contractInfo.binRuntime);
 
         // Accept only valid jumpi
-        auto executive = container.loadContract(bin, ca); // 通过bin和ABI可以获得excutive
+        auto executive = container.loadContract(bin, ca); 
         if (!contractInfo.isMain)
         {
             /* Load Attacker agent contract */
@@ -596,9 +591,9 @@ void Fuzzer::start()
             // There are uncovered branches or not
             auto fi = [&](const pair<string, Leader> &p) { return p.second.comparisonValue != 0; };
             auto numUncoveredBranches =
-                count_if(leaders.begin(), leaders.end(), fi); //当前还没有Cover的branch
+                count_if(leaders.begin(), leaders.end(), fi); 
             if (!numUncoveredBranches)
-            { //没有办法cover一个新分支
+            { 
                 auto curItem = (*leaders.begin()).second.item;
                 Mutation mutation(curItem, make_tuple(codeDict, addressDict));
                 vulnerabilities = container.analyze();

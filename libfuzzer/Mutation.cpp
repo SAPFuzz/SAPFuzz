@@ -95,7 +95,7 @@ void Mutation::singleWalkingByte(OnMutateFunc cb)
         if (!eff[effAPos(stageCur)])
         {
             if (item.res.cksum != curFuzzItem.res.cksum)
-            { //走了新分支？
+            {  
 
                 eff[effAPos(stageCur)] = 1;
                 effCount += 1;

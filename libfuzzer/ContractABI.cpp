@@ -160,7 +160,7 @@ bytes ContractABI::postprocessTestData(bytes data)
     if (!balance)
         data[32] = 0xff;
     if (!sender)
-        data[63] = 0xf0;  // Attacker 地址默认为 0xf0，TODO-支持多个Attacker
+        data[63] = 0xf0;  
     return data;
 }
 
@@ -361,7 +361,7 @@ ContractABI::ContractABI(string abiJson)
             funcIdxs[fd.selector] = idx++;
         }
         if ((type == "constructor" || type == "function") && constant == "false")
-        {  //忽略那些不会改变 Storage 的 Func
+        { 
             auto inputNodes = node.second.get_child("inputs");
             string name = type == "constructor" ? "" : node.second.get<string>("name");
             if (node.second.get_child_optional("payable"))

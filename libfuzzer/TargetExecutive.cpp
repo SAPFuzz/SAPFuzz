@@ -19,8 +19,7 @@ TargetContainerResult TargetExecutive::execP(pair<bytes /*FuzzData*/, vector<siz
                                              const tuple<unordered_set<uint64_t>, unordered_set<uint64_t>> &validJumpis, bool newOrder,
                                              unordered_set<string> coveredTracebits)
 {
-    /* Save all hit branches to trace_bits */
-    // trace_bits: (lastpc : nowpc) 如 1:2 和 1:16 就是一个分支的left和right
+    /* Save all hit branches to trace_bits */ 
     Instruction prevInst;
     RecordParam recordParam;
     u256 lastCompValue = 0;
@@ -145,15 +144,14 @@ TargetContainerResult TargetExecutive::execP(pair<bytes /*FuzzData*/, vector<siz
         recordable = recordable ||
                      !recordParam.isDeployment && get<1>(validJumpis).count(recordParam.lastpc);
         if (prevInst == Instruction::JUMPCI && recordable)
-        {
-            //一个分支会Cover其中之一
+        { 
             auto branchId = to_string(recordParam.lastpc) + ":" + to_string(pc);
-            tracebits.insert(branchId); // 记录被Cover的branch
+            tracebits.insert(branchId);  
             /* Calculate branch distance */
             u64 jumpDest = pc == jumpDest1 ? jumpDest2 : jumpDest1;
             branchId = to_string(recordParam.lastpc) + ":" +
-                       to_string(jumpDest);       //计算没有被Cover的branch，并计算其距离
-            predicates[branchId] = lastCompValue; // ComValue : |a - b| + 1 , 就是dist
+                       to_string(jumpDest);       
+            predicates[branchId] = lastCompValue; // ComValue : |a - b| + 1 
         }
         prevInst = inst;
         recordParam.lastpc = pc;
@@ -256,8 +254,7 @@ TargetContainerResult TargetExecutive::execA(pair<bytes /*FuzzData*/, vector<siz
                                              const tuple<unordered_set<uint64_t>, unordered_set<uint64_t>> &validJumpis, bool newOrder,
                                              unordered_set<string> coveredTracebits)
 {
-    /* Save all hit branches to trace_bits */
-    // trace_bits: (lastpc : nowpc) 如 1:2 和 1:16 就是一个分支的left和right
+    /* Save all hit branches to trace_bits */ 
     Instruction prevInst;
     RecordParam recordParam;
     u256 lastCompValue = 0;
@@ -326,8 +323,7 @@ TargetContainerResult TargetExecutive::execA(pair<bytes /*FuzzData*/, vector<siz
                 vars.insert(var);
                 trace.push_back(node);
             }
-            execDur -= timer.elapsed();
-            //从右向左压入栈
+            execDur -= timer.elapsed(); 
             if (inst == Instruction::SUICIDE || inst == Instruction::NUMBER ||
                 inst == Instruction::TIMESTAMP || inst == Instruction::INVALID ||
                 inst == Instruction::ADD || inst == Instruction::SUB)
@@ -390,15 +386,14 @@ TargetContainerResult TargetExecutive::execA(pair<bytes /*FuzzData*/, vector<siz
         recordable = recordable ||
                      !recordParam.isDeployment && get<1>(validJumpis).count(recordParam.lastpc);
         if (prevInst == Instruction::JUMPCI && recordable)
-        {
-            //一个分支会Cover其中之一
+        { 
             auto branchId = to_string(recordParam.lastpc) + ":" + to_string(pc);
-            tracebits.insert(branchId); // 记录被Cover的branch
+            tracebits.insert(branchId); 
             /* Calculate branch distance */
             u64 jumpDest = pc == jumpDest1 ? jumpDest2 : jumpDest1;
             branchId = to_string(recordParam.lastpc) + ":" +
-                       to_string(jumpDest);       //计算没有被Cover的branch，并计算其距离
-            predicates[branchId] = lastCompValue; // ComValue : |a - b| + 1 , 就是dist
+                       to_string(jumpDest);      
+            predicates[branchId] = lastCompValue; 
         }
         prevInst = inst;
         recordParam.lastpc = pc;

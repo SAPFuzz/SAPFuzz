@@ -35,19 +35,18 @@ BytecodeBranch::BytecodeBranch(const ContractInfo& contractInfo)
             {
                 auto offset = decompressedSourcemap[i][0];
                 auto len = decompressedSourcemap[i][1];
-                auto snippet =
-                    contractInfo.source.substr(offset, len);  //在源码中通过offset和len找到控制结构
+                auto snippet = contractInfo.source.substr(offset, len);
                 if (boost::starts_with(snippet, "if") || boost::starts_with(snippet, "while") ||
                     boost::starts_with(snippet, "require") || boost::starts_with(snippet, "assert"))
                 {
                     Logger::info("----");
                     for (auto candidate : candidates)
-                    {  // candidate: <offset, len, pc>， 其中 pc 从零开始
+                    {  
                         if (get<0>(candidate) > offset &&
                             get<0>(candidate) + get<1>(candidate) < offset + len)
                         {
                             auto candidateSnippet = contractInfo.source.substr(
-                                get<0>(candidate), get<1>(candidate));  //把contractInfo分成代码片段
+                                get<0>(candidate), get<1>(candidate)); 
                             auto numConstant = count_if(constantJumpis.begin(),
                                 constantJumpis.end(), [&](const pair<uint64_t, uint64_t>& j) {
                                     return get<0>(candidate) >= get<0>(j) &&
@@ -116,9 +115,9 @@ vector<pair<uint64_t, Instruction>> BytecodeBranch::decodeBytecode(bytes bytecod
         if (inst >= Instruction::PUSH1 && inst <= Instruction::PUSH32)
         {
             auto jumpNum =
-                bytecode[pc] - (uint64_t)Instruction::PUSH1 + 1;  // PUSH后面会跟参数，跳过去
+                bytecode[pc] - (uint64_t)Instruction::PUSH1 + 1;  
             auto payload = bytes(bytecode.begin() + pc + 1, bytecode.begin() + pc + 1 + jumpNum);
-            pc += jumpNum;  //跳过参数
+            pc += jumpNum; 
         }
         instructions.push_back(make_pair(pc, inst));
         pc++;

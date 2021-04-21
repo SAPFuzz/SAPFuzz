@@ -12,7 +12,7 @@ using namespace boost::multiprecision;
 
 namespace fuzzer {
   TargetContainer::TargetContainer() {
-    program = new TargetProgram();//program 是网络
+    program = new TargetProgram(); 
     oracleFactory = new OracleFactory();
     baseAddress = ATTACKER_ADDRESS;
   }

@@ -60,8 +60,7 @@ struct Pattern
                 {
                     str += "W";
                 }
-            }
-            // patternType = getPatternType(str);
+            } 
             if (str == "RW")
                 patternType = RW;
             if (str == "WR")
@@ -78,8 +77,7 @@ struct Pattern
                 patternType = RWW;
             if (str == "WWW")
                 patternType = WWW;
-        }
-        // len为4的Patterntype另行设置
+        } 
     }
 };
 
